@@ -1,32 +1,29 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NWG Transport Hub</title>
-<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px}input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:4px 0 10px}button{border:0;padding:12px;background:#0a7a2e;color:#fff;border-radius:9px;font-weight:bold}button.wa{background:#25D366;margin-top:8px}.curr{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.curr div{flex:1;min-width:110px;background:#f0f7ff;border:1px solid #cfe0ff;border-radius:10px;padding:10px;text-align:center}.curr b{color:#003366}.nav{display:flex;gap:8px;margin-bottom:12px}.nav a{flex:1;text-align:center;background:#fff;border:1px solid #ddd;padding:10px;border-radius:10px;text-decoration:none;color:#003366;font-weight:bold}</style></head><body>
+<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px}input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:4px 0 10px}button{border:0;padding:12px;background:#0a7a2e;color:#fff;border-radius:9px;font-weight:bold}button.wa{background:#25D366;margin-top:8px}.curr{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.curr div{flex:1;min-width:110px;background:#f0f7ff;border:1px solid #cfe0ff;border-radius:10px;padding:10px;text-align:center}.curr b{color:#003366}.nav{display:flex;gap:8px;margin-bottom:12px}.nav a{flex:1;text-align:center;background:#fff;border:1px solid #ddd;padding:10px;border-radius:10px;text-decoration:none;color:#003366;font-weight:bold}.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{flex:1;background:#e8eef5;color:#003366}.tabs button.active{background:#003366;color:#fff}</style></head><body>
 <header><h1>NWG TRANSPORT HUB</h1><p>New World Group • Season 1447/48</p></header>
 <div class="wrap">
 <div class="nav"><a href="index.html">Single</a><a href="rates.html">Rates</a><a href="package.html">Package</a><a href="bookings.html">Bookings</a></div>
-<div class="card"><h2>Single Booking</h2>
+<div class="card">
+<div class="tabs"><button id="tSingle" class="active" onclick="setMode('single')">SINGLE TRIP</button><button id="tFull" onclick="setMode('full')">FULL TRIP - 5 LEGS</button></div>
+<h2 id="title">Single Booking</h2>
 <label>Agent Name</label><input id="agent" placeholder="Enter Agent Name">
 <label>Pax / Leader Name</label><input id="pax" placeholder="Enter Pax Name">
-<label>Hotel Name - Type Any Hotel</label><input id="hotel" placeholder="e.g. Pullman Zamzam, Al Mauqam, Hilton, Swissotel">
+<label>Makkah Hotel</label><input id="hMak" placeholder="Type Makkah Hotel Name">
+<label>Medina Hotel</label><input id="hMed" placeholder="Type Medina Hotel Name">
+<div id="singleBox">
 <label>Destination / Route - All Routes</label><select id="route" onchange="showPrice()">
-<option>JED APT - MAK HOTEL</option>
-<option>MAK HOTEL - JED APT</option>
-<option>MAK HOTEL - MED HOTEL</option>
-<option>JED APT - MED HOTEL</option>
-<option>MED HOTEL - MED HOTEL</option>
-<option>MED HOTEL - MED APT</option>
-<option>MED APT - MED HOTEL</option>
-<option>MAKKAH ZIYARAT</option>
-<option>MADINA ZIYARAT</option>
-<option>MAK HOTEL - TAIF ZIYARAT</option>
-<option>TAIF - MAK HOTEL (RETURN)</option>
-<option>MAK TO MED (VIA BADAR)</option>
-<option>JED APT - TAIF</option>
-<option>JED APT - MAK HOTEL (HAJJ TERMINAL)</option>
-<option>MAK HOTEL - JED APT (HAJJ TERMINAL)</option>
+<option>JED APT - MAK HOTEL</option><option>MAK HOTEL - JED APT</option><option>MAK HOTEL - MED HOTEL</option><option>JED APT - MED HOTEL</option><option>MED HOTEL - MED HOTEL</option><option>MED HOTEL - MED APT</option><option>MED APT - MED HOTEL</option><option>MAKKAH ZIYARAT</option><option>MADINA ZIYARAT</option><option>MAK HOTEL - TAIF ZIYARAT</option><option>TAIF - MAK HOTEL (RETURN)</option><option>MAK TO MED (VIA BADAR)</option><option>JED APT - TAIF</option><option>JED APT - MAK HOTEL (HAJJ TERMINAL)</option><option>MAK HOTEL - JED APT (HAJJ TERMINAL)</option>
 </select>
+</div>
+<div id="fullBox" style="display:none">
+<label>Leg 1 - JED APT to MAK HOTEL</label><select id="l1"><option value="190">Car 190</option><option value="210">Hi-Staria 210</option><option value="385">GMC 385</option><option value="285">Hiace 285</option><option value="520">Coaster 520</option></select>
+<label>Leg 2 - MAKKAH ZIYARAT</label><select id="l2"><option value="190">Car 190</option><option value="210">Hi-Staria 210</option><option value="325">GMC 325</option><option value="300">Hiace 300</option><option value="425">Coaster 425</option></select>
+<label>Leg 3 - MAK HOTEL to MED HOTEL</label><select id="l3"><option value="360">Car 360</option><option value="400">Hi-Staria 400</option><option value="850">GMC 850</option><option value="510">Hiace 510</option><option value="850">Coaster 850</option></select>
+<label>Leg 4 - MADINA ZIYARAT</label><select id="l4"><option value="190">Car 190</option><option value="210">Hi-Staria 210</option><option value="325">GMC 325</option><option value="300">Hiace 300</option><option value="425">Coaster 425</option></select>
+<label>Leg 5 - MED HOTEL to MED APT / JED APT</label><select id="l5"><option value="125">MED APT - Car 125</option><option value="275">MED APT - GMC 275</option><option value="180">JED APT - Car 180</option><option value="350">JED APT - GMC 350</option></select>
+</div>
 <label>Vehicle</label><select id="veh" onchange="showPrice()"><option>Car</option><option>Hi-Staria</option><option>GMC</option><option>Hiace</option><option>Coaster</option></select>
 <p id="baseShow" style="color:#003366;font-weight:bold">Base Price: 190 SAR</p>
-<label><input type="checkbox" id="tower" style="width:auto"> Tick ONLY if Hotel is Pullman Zamzam / Makkah Tower +30 SAR</label><br><br>
 <button onclick="calc()">CALCULATE TOTAL</button>
 <h2 id="r">Total: 0 SAR</h2>
 <div class="curr" id="curr"></div>
@@ -34,34 +31,23 @@
 <button class="wa" onclick="shareWA()">📲 SHARE ON WHATSAPP</button>
 </div></div>
 <script>
-var RATES={
-"JED APT - MAK HOTEL":[190,210,385,285,520],
-"MAK HOTEL - JED APT":[180,190,350,270,500],
-"MAK HOTEL - MED HOTEL":[360,400,850,510,850],
-"JED APT - MED HOTEL":[385,415,875,525,850],
-"MED HOTEL - MED HOTEL":[130,155,280,290,450],
-"MED HOTEL - MED APT":[125,150,275,285,450],
-"MED APT - MED HOTEL":[125,150,275,285,450],
-"MAKKAH ZIYARAT":[190,210,325,300,425],
-"MADINA ZIYARAT":[190,210,325,300,425],
-"MAK HOTEL - TAIF ZIYARAT":[400,425,900,525,900],
-"TAIF - MAK HOTEL (RETURN)":[400,425,900,525,900],
-"MAK TO MED (VIA BADAR)":[475,525,950,650,1000],
-"JED APT - TAIF":[450,475,950,550,950],
-"JED APT - MAK HOTEL (HAJJ TERMINAL)":[280,300,475,375,610],
-"MAK HOTEL - JED APT (HAJJ TERMINAL)":[270,280,440,360,590]
-};
+var mode="single";
+var RATES={"JED APT - MAK HOTEL":[190,210,385,285,520],"MAK HOTEL - JED APT":[180,190,350,270,500],"MAK HOTEL - MED HOTEL":[360,400,850,510,850],"JED APT - MED HOTEL":[385,415,875,525,850],"MED HOTEL - MED HOTEL":[130,155,280,290,450],"MED HOTEL - MED APT":[125,150,275,285,450],"MED APT - MED HOTEL":[125,150,275,285,450],"MAKKAH ZIYARAT":[190,210,325,300,425],"MADINA ZIYARAT":[190,210,325,300,425],"MAK HOTEL - TAIF ZIYARAT":[400,425,900,525,900],"TAIF - MAK HOTEL (RETURN)":[400,425,900,525,900],"MAK TO MED (VIA BADAR)":[475,525,950,650,1000],"JED APT - TAIF":[450,475,950,550,950],"JED APT - MAK HOTEL (HAJJ TERMINAL)":[280,300,475,375,610],"MAK HOTEL - JED APT (HAJJ TERMINAL)":[270,280,440,360,590]};
 var VEH=["Car","Hi-Staria","GMC","Hiace","Coaster"];
+function setMode(m){mode=m;document.getElementById("tSingle").className=m=="single"?"active":"";document.getElementById("tFull").className=m=="full"?"active":"";document.getElementById("singleBox").style.display=m=="single"?"block":"none";document.getElementById("fullBox").style.display=m=="full"?"block":"none";document.getElementById("title").innerText=m=="single"?"Single Booking":"Full Trip Booking - JED - MAK - Ziyarat - MED - Ziyarat - Airport";showPrice();}
 function getBase(){var rt=document.getElementById("route").value;var v=VEH.indexOf(document.getElementById("veh").value);return RATES[rt][v];}
-function showPrice(){document.getElementById("baseShow").innerText="Base Price: "+getBase()+" SAR - "+document.getElementById("route").value+" - "+document.getElementById("veh").value;}
+function showPrice(){if(mode=="single"){document.getElementById("baseShow").innerText="Base Price: "+getBase()+" SAR - "+document.getElementById("route").value+" - "+document.getElementById("veh").value;}else{document.getElementById("baseShow").innerText="Full Trip - 5 Legs Total - Select Vehicle Per Leg Above";}}
 var lastMsg="";
-function calc(){var base=getBase();var ex=document.getElementById("tower").checked?30:0;var t=base+ex;var m=Math.round(t*0.10);var f=t+m;
-document.getElementById("r").innerText="Base: "+t+" + Markup: "+m+" = FINAL: "+f+" SAR";
+function calc(){var base=0;var label="";
+if(mode=="single"){base=getBase();label=document.getElementById("route").value;}
+else{base=parseInt(document.getElementById("l1").value)+parseInt(document.getElementById("l2").value)+parseInt(document.getElementById("l3").value)+parseInt(document.getElementById("l4").value)+parseInt(document.getElementById("l5").value);label="FULL TRIP - 5 LEGS (JED-MAK-Ziyarat-MED-Ziyarat-Airport)";}
+var m=Math.round(base*0.10);var f=base+m;
+document.getElementById("r").innerText="Base: "+base+" + Markup: "+m+" = FINAL: "+f+" SAR";
 var rates={USD:0.2667,PKR:73.77,CAD:0.3801,GBP:0.2014,EUR:0.2409};var h="";for(var c in rates){h+="<div>"+c+"<br><b>"+(f*rates[c]).toLocaleString(undefined,{maximumFractionDigits:2})+" "+c+"</b></div>";}
 document.getElementById("curr").innerHTML=h;
-var det="Agent: "+document.getElementById("agent").value+" | Pax: "+document.getElementById("pax").value+" | Hotel: "+document.getElementById("hotel").value+" | Route: "+document.getElementById("route").value+" | Vehicle: "+document.getElementById("veh").value;
+var det="Agent: "+document.getElementById("agent").value+" | Pax: "+document.getElementById("pax").value+" | Makkah Hotel: "+document.getElementById("hMak").value+" | Medina Hotel: "+document.getElementById("hMed").value+" | Route: "+label+" | Vehicle: "+document.getElementById("veh").value;
 document.getElementById("detail").innerText=det;
-lastMsg="NWG Transport - Single Booking%0A"+det.replace(/\|/g,"-")+"%0ARoute Base: "+base+" + Extra: "+ex+" + Markup: "+m+"%0A*FINAL: "+f+" SAR*%0AUSD: "+(f*0.2667).toFixed(2)+" | PKR: "+Math.round(f*73.77);
+lastMsg="NWG Transport%0A"+det.replace(/\|/g,"-")+"%0A*FINAL: "+f+" SAR*%0AUSD: "+(f*0.2667).toFixed(2)+" | PKR: "+Math.round(f*73.77);
 }
 function shareWA(){if(!lastMsg){calc();} window.open("https://wa.me/?text="+lastMsg,"_blank");}
 showPrice();
