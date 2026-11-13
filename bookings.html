@@ -1,88 +1,39 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NWG Dashboard - Bookings</title>
-<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:950px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px}.nav{display:flex;gap:8px;margin-bottom:12px}.nav a{flex:1;text-align:center;background:#fff;border:1px solid #ddd;padding:10px;border-radius:10px;text-decoration:none;color:#003366;font-weight:bold}button{border:0;padding:10px 12px;border-radius:8px;font-weight:bold;color:#fff;cursor:pointer}button.del{background:#c62828}button.wa{background:#25D366}button.driver{background:#ff6d00}button.refresh{background:#003366;width:100%;padding:12px}.dash{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.dash div{flex:1;min-width:110px;background:#fff;border-radius:12px;padding:12px;text-align:center}.dash b{font-size:22px;color:#003366}.alert24{background:#c62828;color:#fff;border-radius:12px;padding:14px;margin-bottom:12px;font-weight:bold}.alert24 small{font-weight:normal}.card.urgent{border:3px solid #c62828;background:#fff5f5}.card.soon{border:3px solid #ff9800}.badge{background:#e8f5e9;color:#0a7a2e;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold}.badge-red{background:#ffebee;color:#c62828;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold}.badge-orange{background:#fff3e0;color:#ef6c00;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold}</style></head><body>
-<header><h1>NWG DASHBOARD</h1><p>All Agents - All Bookings - Live</p></header>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NWG Dashboard</title>
+<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:950px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px}.nav{display:flex;gap:8px;margin-bottom:12px}.nav a{flex:1;text-align:center;background:#fff;border:1px solid #ddd;padding:10px;border-radius:10px;text-decoration:none;color:#003366;font-weight:bold}button{border:0;padding:10px 12px;border-radius:8px;font-weight:bold;color:#fff}button.del{background:#c62828}button.wa{background:#25D366}button.driver{background:#ff6d00}button.refresh{background:#003366;width:100%;padding:12px}.dash{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.dash div{flex:1;min-width:110px;background:#fff;border-radius:12px;padding:12px;text-align:center}.dash b{font-size:22px;color:#003366}.alert24{background:#c62828;color:#fff;border-radius:12px;padding:14px;margin-bottom:12px;font-weight:bold}.card.urgent{border:3px solid #c62828;background:#fff5f5}.meta{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px;font-size:12px;color:#334155;margin-top:8px}.meta b{color:#003366}</style></head><body>
+<header><h1>NWG DASHBOARD</h1><p>All Agents - All Bookings - With Audit Trail</p></header>
 <div class="wrap">
 <div class="nav"><a href="index.html">Single</a><a href="rates.html">Rates</a><a href="package.html">Package</a><a href="bookings.html">Bookings</a></div>
-
 <div id="alertBox"></div>
-
-<div class="dash">
-<div>Total<br><b id="cTotal">0</b></div>
-<div>Today<br><b id="cToday">0</b></div>
-<div style="background:#ffebee">Next 24 Hrs 🔴<br><b id="c24" style="color:#c62828">0</b></div>
-<div>Upcoming<br><b id="cUp">0</b></div>
-</div>
-
+<div class="dash"><div>Total<br><b id="cTotal">0</b></div><div>Today<br><b id="cToday">0</b></div><div style="background:#ffebee">Next 24 Hrs 🔴<br><b id="c24" style="color:#c62828">0</b></div><div>Upcoming<br><b id="cUp">0</b></div></div>
 <button class="refresh" onclick="loadBookings()">🔄 REFRESH - CHECK 24H ALERTS</button><br><br>
-<div id="list"></div>
-</div>
+<div id="list"></div></div>
 <script>
-// ===== PUT YOUR GOOGLE APPS SCRIPT URL HERE =====
-var SCRIPT_URL = "PASTE_YOUR_URL_HERE"; // e.g. https://script.google.com/macros/s/XXXX/exec
-// If no URL, it will use localStorage (your phone only) for testing
-
-function parseDateTime(dateStr, timeStr){
-  if(!dateStr) return null;
-  var d = new Date(dateStr + "T" + (timeStr||"00:00"));
-  return isNaN(d) ? null : d;
-}
-function hoursLeft(b){
-  var dt = parseDateTime(b.date, b.time);
-  if(!dt) return 9999;
-  return (dt - new Date()) / (1000*60*60);
-}
+var SCRIPT_URL = "PASTE_YOUR_NEW_EXEC_URL_HERE";
+function parseDT(d,t){ if(!d) return null; var x=new Date(d+"T"+(t||"00:00")); return isNaN(x)?null:x; }
+function hrsLeft(b){ var dt=parseDT(b.date,b.time); if(!dt) return 9999; return (dt-new Date())/(1000*60*60); }
 function loadBookings(){
-  if(SCRIPT_URL && SCRIPT_URL.indexOf("script.google")>-1){
-    fetch(SCRIPT_URL).then(r=>r.json()).then(show).catch(()=>{ show(JSON.parse(localStorage.getItem("nwg_bookings")||"[]")); });
-  } else {
-    show(JSON.parse(localStorage.getItem("nwg_bookings")||"[]"));
-  }
+  if(SCRIPT_URL.indexOf("script.google")>-1){ fetch(SCRIPT_URL).then(r=>r.json()).then(show).catch(()=>show(JSON.parse(localStorage.getItem("nwg_bookings")||"[]"))); }
+  else show(JSON.parse(localStorage.getItem("nwg_bookings")||"[]"));
 }
 function show(list){
-  if(!list) list=[];
-  // Sort by date - nearest first
-  list.sort((a,b)=> (parseDateTime(a.date,a.time)||new Date(9999)) - (parseDateTime(b.date,b.time)||new Date(9999)));
-  var now = new Date(); var todayStr = now.toISOString().slice(0,10);
-  var c24 = list.filter(b=>{var h=hoursLeft(b); return h>=0 && h<=24;});
-  var cToday = list.filter(b=> b.date==todayStr || (b.date && b.date.indexOf(todayStr)>-1));
-  var cUp = list.filter(b=> hoursLeft(b)>0);
+  list.sort((a,b)=>(parseDT(a.date,a.time)||new Date(9999))-(parseDT(b.date,b.time)||new Date(9999)));
+  var today=new Date().toISOString().slice(0,10);
+  var c24=list.filter(b=>{var h=hrsLeft(b);return h>=0&&h<=24;});
   document.getElementById("cTotal").innerText=list.length;
-  document.getElementById("cToday").innerText=cToday.length;
+  document.getElementById("cToday").innerText=list.filter(b=>b.date==today).length;
   document.getElementById("c24").innerText=c24.length;
-  document.getElementById("cUp").innerText=cUp.length;
-
-  // --- 24H ALERT BOX ---
+  document.getElementById("cUp").innerText=list.filter(b=>hrsLeft(b)>0).length;
   if(c24.length>0){
-    document.getElementById("alertBox").innerHTML = "<div class='alert24'>🚨 URGENT - "+c24.length+" BOOKING(S) IN NEXT 24 HOURS<br><small>"+c24.map(b=> "• "+b.pax+" - "+b.date+" "+b.time+" - "+b.type+" - "+b.total+" SAR").join("<br>")+"<br>Send WhatsApp reminder to Driver / Company NOW</small></div>";
-    // Auto Alert Popup - Only once per open
-    if(!sessionStorage.getItem("alert24shown")){
-      sessionStorage.setItem("alert24shown","1");
-      setTimeout(()=>{ alert("🚨 24 HOURS LEFT ALERT!\n\n"+c24.length+" Booking(s) in next 24 Hrs:\n"+c24.map(b=> "- "+b.pax+" | "+b.date+" "+b.time+" | "+b.total+" SAR").join("\n")+"\n\nPlease remind Driver / Transport Company NOW!"); }, 500);
-    }
-  } else {
-    document.getElementById("alertBox").innerHTML = "<div class='card' style='background:#e8f5e9'>✅ No Urgent Booking - No pickup in next 24 hours</div>";
-  }
-
-  if(list.length==0){ document.getElementById("list").innerHTML="<div class='card'><h3>No Bookings Yet</h3><p>Go to Single / Full Trip → CALCULATE → SAVE BOOKING</p></div>"; return; }
-
-  document.getElementById("list").innerHTML = list.map((b,i)=>{
-    var h = hoursLeft(b);
-    var cls = h>=0 && h<=24 ? "card urgent" : (h>24 && h<=48 ? "card soon" : "card");
-    var badge = h>=0 && h<=24 ? "<span class='badge-red'>🔴 IN 24H - REMIND DRIVER</span>" : (h>24 && h<=48 ? "<span class='badge-orange'>🟠 IN 48H</span>" : "<span class='badge'>✅ Upcoming</span>");
-    var hrsTxt = h<0 ? " - PASSED / DONE" : " - In "+Math.round(h)+" Hrs Left";
-    return "<div class='"+cls+"'>"+badge+" <b>"+b.total+" SAR</b> "+hrsTxt+"<br><br><b>Agent:</b> "+b.agent+" | <b>Pax:</b> "+b.pax+"<br><b>Date:</b> "+b.date+" | <b>Time:</b> "+b.time+" | <b>Type:</b> "+b.type+"<br><p style='font-size:13px;color:#333'>"+b.detail+"</p><small>Saved: "+(b.created||"")+"</small><br><br><button class='driver' onclick='remindDriver("+i+")'>🚨 REMIND DRIVER</button> <button class='wa' onclick='share("+i+")'>📲 WhatsApp Company</button> <button class='del' onclick='delLocal("+i+")'>Delete</button></div>";
-  }).join("");
-  window._list = list;
+    document.getElementById("alertBox").innerHTML="<div class='alert24'>🚨 "+c24.length+" BOOKING(S) IN NEXT 24 HOURS<br><small>"+c24.map(b=>"• "+b.pax+" - "+b.date+" "+b.time).join("<br>")+"</small></div>";
+    if(!sessionStorage.getItem("a24")){ sessionStorage.setItem("a24","1"); setTimeout(()=>alert("🚨 24H ALERT\n\n"+c24.map(b=>"- "+b.pax+" | "+b.date+" "+b.time).join("\n")),500); }
+  } else document.getElementById("alertBox").innerHTML="<div class='card' style='background:#e8f5e9'>✅ No Urgent Booking in next 24 hours</div>";
+  if(!list.length){ document.getElementById("list").innerHTML="<div class='card'>No Bookings Yet</div>"; return; }
+  document.getElementById("list").innerHTML=list.map((b,i)=>{
+    var h=hrsLeft(b); var cls=h>=0&&h<=24?"card urgent":"card";
+    return "<div class='"+cls+"'><b>"+b.type+"</b> - <b>"+b.total+" SAR</b> - In "+Math.round(h)+" Hrs<br><br><b>Agent:</b> "+b.agent+" | <b>Pax:</b> "+b.pax+"<br><b>Date:</b> "+b.date+" | <b>Time:</b> "+b.time+"<br><p style='font-size:13px'>"+b.detail+"</p><div class='meta'>🕒 <b>Created At:</b> "+(b.createdAt||b.created||"-")+"<br>✏️ <b>Modified At:</b> "+(b.modifiedAt||b.createdAt||"-")+"<br>👤 <b>Created By:</b> "+(b.createdBy||b.agent||"-")+"<br>🔄 <b>Modified By:</b> "+(b.modifiedBy||b.createdBy||"-")+"</div><br><button class='driver' onclick='remind("+i+")'>🚨 REMIND DRIVER</button> <button class='wa' onclick='share("+i+")'>📲 WhatsApp</button></div>";
+  }).join(""); window._list=list;
 }
-function share(i){ var b=window._list[i]; var msg="NWG "+b.type+" Booking%0A"+encodeURIComponent(b.detail)+"%0A*FINAL: "+b.total+" SAR*"; window.open("https://wa.me/?text="+msg,"_blank"); }
-function remindDriver(i){
-  var b=window._list[i];
-  var msg = "🚨 URGENT REMINDER - NWG TRANSPORT%0A%0A*Pickup in 24 Hrs*%0A%0APax: "+encodeURIComponent(b.pax)+"%0AAgent: "+encodeURIComponent(b.agent)+"%0ADate: "+b.date+"%0ATime: "+b.time+"%0AType: "+encodeURIComponent(b.type)+"%0ADetail: "+encodeURIComponent(b.detail)+"%0A*Total: "+b.total+" SAR*%0A%0APlease confirm driver + vehicle NOW. Driver must reach 30 min early.";
-  window.open("https://wa.me/?text="+msg,"_blank");
-  alert("Driver Reminder Sent via WhatsApp ✅\n\n"+b.pax+" - "+b.date+" "+b.time);
-}
-function delLocal(i){ if(!confirm("Delete this booking?")) return; var l=JSON.parse(localStorage.getItem("nwg_bookings")||"[]"); l.splice(i,1); localStorage.setItem("nwg_bookings",JSON.stringify(l)); loadBookings(); }
-loadBookings();
-// Auto refresh every 60 sec to check 24h alert
-setInterval(loadBookings, 60000);
+function share(i){ var b=window._list[i]; window.open("https://wa.me/?text="+encodeURIComponent("NWG "+b.type+" - "+b.detail+" FINAL: "+b.total+" SAR"),"_blank"); }
+function remind(i){ var b=window._list[i]; window.open("https://wa.me/?text="+encodeURIComponent("🚨 URGENT - Pickup in 24H\nPax: "+b.pax+"\nDate: "+b.date+" "+b.time+"\nDetail: "+b.detail+"\nTotal: "+b.total+" SAR\nCreated By: "+b.createdBy+"\nPlease confirm driver NOW"),"_blank"); }
+loadBookings(); setInterval(loadBookings,60000);
 </script></body></html>
