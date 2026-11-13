@@ -1,31 +1,34 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NWG Package</title>
-<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px}input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:4px 0 10px}button{border:0;padding:12px;background:#0a7a2e;color:#fff;border-radius:9px;font-weight:bold}.curr{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.curr div{flex:1;min-width:110px;background:#f0f7ff;border:1px solid #cfe0ff;border-radius:10px;padding:10px;text-align:center}.curr b{color:#003366}</style></head><body>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NWG Multi-Leg Package</title>
+<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px}input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:4px 0 10px}button{border:0;padding:12px;background:#0a7a2e;color:#fff;border-radius:9px;font-weight:bold}button.wa{background:#25D366;margin-top:8px}.curr{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.curr div{flex:1;min-width:110px;background:#f0f7ff;border:1px solid #cfe0ff;border-radius:10px;padding:10px;text-align:center}.curr b{color:#003366}.nav{display:flex;gap:8px;margin-bottom:12px}.nav a{flex:1;text-align:center;background:#fff;border:1px solid #ddd;padding:10px;border-radius:10px;text-decoration:none;color:#003366;font-weight:bold}</style></head><body>
 <header><h1>NWG MULTI-LEG PACKAGE</h1><p>JED - MAK - Ziyarat - MED - Ziyarat - Airport</p></header>
-<div class="wrap"><div class="card">
-<label>Group / Agent Name</label><input id="g" placeholder="Enter Group Name - e.g. Al-Noor Group">
+<div class="wrap">
+<div class="nav"><a href="index.html">Single</a><a href="rates.html">Rates</a><a href="package.html">Package</a><a href="bookings.html">Bookings</a></div>
+<div class="card"><h2>Full Trip Package</h2>
+<label>Group / Agent Name</label><input id="group" placeholder="Enter Group Name">
 <label>Pax / Leader Name</label><input id="pax" placeholder="Enter Pax Name">
-<label>Makkah Hotel - Type Any Hotel</label><input id="hMak" placeholder="e.g. Pullman Zamzam, Swissotel, Hilton, Dar Al Tawhid">
-<label>Medina Hotel - Type Any Hotel</label><input id="hMed" placeholder="e.g. Pullman Zamzam Medina, Hilton Medina, Dar Al Iman">
+<label>Makkah Hotel</label><input id="hMak" placeholder="Type Makkah Hotel Name">
+<label>Medina Hotel</label><input id="hMed" placeholder="Type Medina Hotel Name">
 <label>Leg 1 - JED APT to MAK HOTEL</label><select id="l1"><option value="190">Car 190</option><option value="210">Hi-Staria 210</option><option value="385">GMC 385</option><option value="285">Hiace 285</option><option value="520">Coaster 520</option></select>
 <label>Leg 2 - MAKKAH ZIYARAT</label><select id="l2"><option value="190">Car 190</option><option value="210">Hi-Staria 210</option><option value="325">GMC 325</option><option value="300">Hiace 300</option><option value="425">Coaster 425</option></select>
 <label>Leg 3 - MAK HOTEL to MED HOTEL</label><select id="l3"><option value="360">Car 360</option><option value="400">Hi-Staria 400</option><option value="850">GMC 850</option><option value="510">Hiace 510</option><option value="850">Coaster 850</option></select>
 <label>Leg 4 - MADINA ZIYARAT</label><select id="l4"><option value="190">Car 190</option><option value="210">Hi-Staria 210</option><option value="325">GMC 325</option><option value="300">Hiace 300</option><option value="425">Coaster 425</option></select>
-<label>Leg 5 - MED HOTEL to MED APT / JED APT</label><select id="l5"><option value="125">MED APT - Car 125</option><option value="275">MED APT - GMC 275</option><option value="180">JED APT - Car 180</option><option value="350">JED APT - GMC 350</option></select>
-<label><input type="checkbox" id="tower" style="width:auto"> Tick ONLY if Makkah Hotel is Pullman Zamzam / Tower +30 SAR</label><br><br>
-<button onclick="calc()">CALCULATE PACKAGE</button>
+<label>Leg 5 - MED HOTEL to MED APT / JED APT</label><select id="l5"><option value="125">MED APT - Car 125</option><option value="150">MED APT - Hi-Staria 150</option><option value="275">MED APT - GMC 275</option><option value="285">MED APT - Hiace 285</option><option value="450">MED APT - Coaster 450</option><option value="180">JED APT - Car 180</option><option value="190">JED APT - Hi-Staria 190</option><option value="350">JED APT - GMC 350</option><option value="270">JED APT - Hiace 270</option><option value="500">JED APT - Coaster 500</option></select>
+<button onclick="calc()">CALCULATE PACKAGE TOTAL</button>
 <h2 id="r">Total: 0 SAR</h2>
 <div class="curr" id="curr"></div>
 <p id="detail" style="font-size:13px;color:#333"></p>
+<button class="wa" onclick="shareWA()">📲 SHARE ON WHATSAPP</button>
 </div></div>
 <script>
-function calc(){
-var t=parseInt(document.getElementById("l1").value)+parseInt(document.getElementById("l2").value)+parseInt(document.getElementById("l3").value)+parseInt(document.getElementById("l4").value)+parseInt(document.getElementById("l5").value);
-var ex=document.getElementById("tower").checked?30:0; t+=ex;
-var m=Math.round(t*0.10);var f=t+m;
-document.getElementById("r").innerText="Base: "+t+" + Markup: "+m+" = FINAL PACKAGE: "+f+" SAR";
-var rates={USD:0.2667,PKR:73.77,CAD:0.3801,GBP:0.2014,EUR:0.2409};
-var h="";for(var c in rates){h+="<div>"+c+"<br><b>"+(f*rates[c]).toLocaleString(undefined,{maximumFractionDigits:2})+" "+c+"</b></div>";}
+var lastMsg="";
+function calc(){var base=parseInt(document.getElementById("l1").value)+parseInt(document.getElementById("l2").value)+parseInt(document.getElementById("l3").value)+parseInt(document.getElementById("l4").value)+parseInt(document.getElementById("l5").value);
+var m=Math.round(base*0.10);var f=base+m;
+document.getElementById("r").innerText="Base: "+base+" + Markup: "+m+" = FINAL PACKAGE: "+f+" SAR";
+var rates={USD:0.2667,PKR:73.77,CAD:0.3801,GBP:0.2014,EUR:0.2409};var h="";for(var c in rates){h+="<div>"+c+"<br><b>"+(f*rates[c]).toLocaleString(undefined,{maximumFractionDigits:2})+" "+c+"</b></div>";}
 document.getElementById("curr").innerHTML=h;
-document.getElementById("detail").innerText="Group: "+document.getElementById("g").value+" | Pax: "+document.getElementById("pax").value+" | Makkah Hotel: "+document.getElementById("hMak").value+" | Medina Hotel: "+document.getElementById("hMed").value;
+var det="Group: "+document.getElementById("group").value+" | Pax: "+document.getElementById("pax").value+" | Makkah Hotel: "+document.getElementById("hMak").value+" | Medina Hotel: "+document.getElementById("hMed").value+" | Legs: "+document.getElementById("l1").value+" + "+document.getElementById("l2").value+" + "+document.getElementById("l3").value+" + "+document.getElementById("l4").value+" + "+document.getElementById("l5").value;
+document.getElementById("detail").innerText=det;
+lastMsg="NWG Full Trip Package%0A"+det.replace(/\|/g,"-")+"%0A*FINAL PACKAGE: "+f+" SAR*%0AUSD: "+(f*0.2667).toFixed(2)+" | PKR: "+Math.round(f*73.77);
 }
+function shareWA(){if(!lastMsg){calc();} window.open("https://wa.me/?text="+lastMsg,"_blank");}
 </script></body></html>
