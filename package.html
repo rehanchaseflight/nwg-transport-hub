@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NWG Package</title>
+<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px}input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:4px 0 10px}button{border:0;padding:12px;background:#0a7a2e;color:#fff;border-radius:9px;font-weight:bold}</style></head><body>
+<header><h1>NWG MULTI-LEG PACKAGE</h1><p>JED - MAK - Ziyarat - MED - Ziyarat - Airport</p></header>
+<div class="wrap"><div class="card">
+<label>Group Name</label><input id="g" value="Ahmed Khan Group">
+<label>Leg 1 - JED APT to MAK HOTEL (Pullman)</label><select id="l1"><option value="190">Car 190</option><option value="385">GMC 385</option><option value="285">Hiace 285</option></select>
+<label>Leg 2 - MAKKAH ZIYARAT</label><select id="l2"><option value="190">Car 190</option><option value="325">GMC 325</option><option value="300">Hiace 300</option></select>
+<label>Leg 3 - MAK HOTEL to MED HOTEL</label><select id="l3"><option value="360">Car 360</option><option value="850">GMC 850</option><option value="510">Hiace 510</option></select>
+<label>Leg 4 - MADINA ZIYARAT</label><select id="l4"><option value="190">Car 190</option><option value="325">GMC 325</option><option value="300">Hiace 300</option></select>
+<label>Leg 5 - MED HOTEL to MED APT</label><select id="l5"><option value="125">Car 125</option><option value="275">GMC 275</option><option value="285">Hiace 285</option></select>
+<label><input type="checkbox" id="tower" checked> Pullman Tower +30</label><br><br>
+<button onclick="calc()">CALCULATE PACKAGE</button>
+<h2 id="r">Total: 0 SAR</h2>
+</div></div>
+<script>
+function calc(){
+var t=parseInt(document.getElementById("l1").value)+parseInt(document.getElementById("l2").value)+parseInt(document.getElementById("l3").value)+parseInt(document.getElementById("l4").value)+parseInt(document.getElementById("l5").value);
+if(document.getElementById("tower").checked) t+=30;
+var m=Math.round(t*0.10);var f=t+m;
+document.getElementById("r").innerText="Base: "+t+" + Markup: "+m+" = FINAL PACKAGE: "+f+" SAR | Group: "+document.getElementById("g").value;
+}
+</script></body></html>
