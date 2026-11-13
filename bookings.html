@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NWG Bookings</title>
+<style>body{font-family:Arial;margin:0;background:#eef2f7}header{background:#003366;color:#fff;padding:14px}.wrap{max-width:1000px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px}input,select{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin:4px 0 10px}button{border:0;padding:10px 14px;border-radius:8px;font-weight:bold;background:#003366;color:#fff;cursor:pointer}button.green{background:#0a7a2e}button.red{background:#c00}table{width:100%;border-collapse:collapse;font-size:13px}th{background:#003366;color:#fff;padding:8px}td{padding:8px;border-bottom:1px solid #eee}.row{display:flex;gap:10px}.row>div{flex:1}</style></head><body>
+<header><h1>NWG BOOKINGS + CONTRACTORS</h1><p>Saved in your phone browser</p></header>
+<div class="wrap">
+<div class="card"><h2>➕ Add Booking</h2>
+<div class="row"><div><input id="agent" placeholder="Agent Name"></div><div><input id="pax" placeholder="Pax Name"></div></div>
+<div class="row"><div><input id="route" placeholder="Route e.g. JED APT - MAK HOTEL"></div><div><input id="fin" type="number" placeholder="Final SAR"></div></div>
+<div class="row"><div><input id="dt" type="date"></div><div><select id="status"><option>Pending</option><option>Accepted</option><option>Completed</option><option>Cancelled</option></select></div></div>
+<button class="green" onclick="add()">✅ SAVE BOOKING</button>
+</div>
+<div class="card"><h2>📋 All Bookings</h2><div id="list"></div><button onclick="clearAll()">Clear All</button></div>
+<div class="card"><h2>🚗 Add Contractor</h2>
+<div class="row"><div><input id="cName" placeholder="Contractor Name"></div><div><input id="cWa" placeholder="WhatsApp 923..."></div></div>
+<div class="row"><div><input id="cVeh" placeholder="Vehicle e.g. GMC"></div><div><input id="cCity" placeholder="City e.g. Makkah"></div></div>
+<button onclick="addC()">Add Contractor</button><div id="clist" style="margin-top:10px"></div>
+</div></div>
+<script>
+var B=JSON.parse(localStorage.getItem("nwg_b")||"[]");
+var C=JSON.parse(localStorage.getItem("nwg_c")||"[]");
+function add(){var b={a:document.getElementById("agent").value,p:document.getElementById("pax").value,r:document.getElementById("route").value,f:document.getElementById("fin").value,d:document.getElementById("dt").value,s:document.getElementById("status").value};if(!b.a)return alert("Enter Agent");B.unshift(b);localStorage.setItem("nwg_b",JSON.stringify(B));render();}
+function del(i){B.splice(i,1);localStorage.setItem("nwg_b",JSON.stringify(B));render();}
+function clearAll(){if(confirm("Clear all?")){B=[];localStorage.setItem("nwg_b","[]");render();}}
+function addC(){var c={n:document.getElementById("cName").value,w:document.getElementById("cWa").value,v:document.getElementById("cVeh").value,ci:document.getElementById("cCity").value};if(!c.n)return alert("Enter Name");C.push(c);localStorage.setItem("nwg_c",JSON.stringify(C));render();}
+function delC(i){C.splice(i,1);localStorage.setItem("nwg_c",JSON.stringify(C));render();}
+function render(){var h="<table><tr><th>Agent / Pax</th><th>Route</th><th>SAR</th><th>Date / Status</th><th></th></tr>";var total=0;for(var i=0;i<B.length;i++){total+=parseInt(B[i].f||0);h+="<tr><td><b>"+B[i].a+"</b><br>"+B[i].p+"</td><td>"+B[i].r+"</td><td><b>"+B[i].f+" SAR</b></td><td>"+B[i].d+"<br>"+B[i].s+"</td><td><button class='red' onclick='del("+i+")'>Delete</button></td></tr>";}h+="</table><p><b>Total: "+total+" SAR | Bookings: "+B.length+"</b></p>";document.getElementById("list").innerHTML=h;var ch="";for(var j=0;j<C.length;j++){ch+="<p><b>"+C[j].n+"</b> - "+C[j].v+" - "+C[j].ci+" - "+C[j].w+" <button class='red' onclick='delC("+j+")'>Delete</button> <button onclick=\"window.open('https://wa.me/"+C[j].w+"','_blank')\">WhatsApp</button></p>";}document.getElementById("clist").innerHTML=ch;}
+render();
+</script></body></html>
