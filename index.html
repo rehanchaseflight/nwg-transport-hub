@@ -7,19 +7,25 @@
 <label>Agent Name</label><input id="agent" placeholder="Enter Agent Name">
 <label>Pax / Leader Name</label><input id="pax" placeholder="Enter Pax Name">
 <label>Hotel Name - Type Any Hotel</label><input id="hotel" placeholder="e.g. Pullman Zamzam, Al Mauqam, Hilton, Swissotel">
-<label>Destination / Route</label><select id="route">
-<option value="190">JED APT - MAK HOTEL - 190</option>
-<option value="180">MAK HOTEL - JED APT - 180</option>
-<option value="360">MAK HOTEL - MED HOTEL - 360</option>
-<option value="385">JED APT - MED HOTEL - 385</option>
-<option value="130">MED HOTEL - MED HOTEL - 130</option>
-<option value="125">MED HOTEL - MED APT - 125</option>
-<option value="190">MAKKAH ZIYARAT - 190</option>
-<option value="190">MADINA ZIYARAT - 190</option>
-<option value="400">MAK HOTEL - TAIF ZIYARAT - 400</option>
-<option value="475">MAK TO MED (VIA BADAR) - 475</option>
+<label>Destination / Route - All Routes</label><select id="route" onchange="showPrice()">
+<option>JED APT - MAK HOTEL</option>
+<option>MAK HOTEL - JED APT</option>
+<option>MAK HOTEL - MED HOTEL</option>
+<option>JED APT - MED HOTEL</option>
+<option>MED HOTEL - MED HOTEL</option>
+<option>MED HOTEL - MED APT</option>
+<option>MED APT - MED HOTEL</option>
+<option>MAKKAH ZIYARAT</option>
+<option>MADINA ZIYARAT</option>
+<option>MAK HOTEL - TAIF ZIYARAT</option>
+<option>TAIF - MAK HOTEL (RETURN)</option>
+<option>MAK TO MED (VIA BADAR)</option>
+<option>JED APT - TAIF</option>
+<option>JED APT - MAK HOTEL (HAJJ TERMINAL)</option>
+<option>MAK HOTEL - JED APT (HAJJ TERMINAL)</option>
 </select>
-<label>Vehicle</label><select id="veh"><option>Car</option><option>Hi-Staria</option><option>GMC</option><option>Hiace</option><option>Coaster</option></select>
+<label>Vehicle</label><select id="veh" onchange="showPrice()"><option>Car</option><option>Hi-Staria</option><option>GMC</option><option>Hiace</option><option>Coaster</option></select>
+<p id="baseShow" style="color:#003366;font-weight:bold">Base Price: 190 SAR</p>
 <label><input type="checkbox" id="tower" style="width:auto"> Tick ONLY if Hotel is Pullman Zamzam / Makkah Tower +30 SAR</label><br><br>
 <button onclick="calc()">CALCULATE TOTAL</button>
 <h2 id="r">Total: 0 SAR</h2>
@@ -28,18 +34,35 @@
 <button class="wa" onclick="shareWA()">📲 SHARE ON WHATSAPP</button>
 </div></div>
 <script>
+var RATES={
+"JED APT - MAK HOTEL":[190,210,385,285,520],
+"MAK HOTEL - JED APT":[180,190,350,270,500],
+"MAK HOTEL - MED HOTEL":[360,400,850,510,850],
+"JED APT - MED HOTEL":[385,415,875,525,850],
+"MED HOTEL - MED HOTEL":[130,155,280,290,450],
+"MED HOTEL - MED APT":[125,150,275,285,450],
+"MED APT - MED HOTEL":[125,150,275,285,450],
+"MAKKAH ZIYARAT":[190,210,325,300,425],
+"MADINA ZIYARAT":[190,210,325,300,425],
+"MAK HOTEL - TAIF ZIYARAT":[400,425,900,525,900],
+"TAIF - MAK HOTEL (RETURN)":[400,425,900,525,900],
+"MAK TO MED (VIA BADAR)":[475,525,950,650,1000],
+"JED APT - TAIF":[450,475,950,550,950],
+"JED APT - MAK HOTEL (HAJJ TERMINAL)":[280,300,475,375,610],
+"MAK HOTEL - JED APT (HAJJ TERMINAL)":[270,280,440,360,590]
+};
+var VEH=["Car","Hi-Staria","GMC","Hiace","Coaster"];
+function getBase(){var rt=document.getElementById("route").value;var v=VEH.indexOf(document.getElementById("veh").value);return RATES[rt][v];}
+function showPrice(){document.getElementById("baseShow").innerText="Base Price: "+getBase()+" SAR - "+document.getElementById("route").value+" - "+document.getElementById("veh").value;}
 var lastMsg="";
-function calc(){
-var base=parseInt(document.getElementById("route").value);
-var ex=document.getElementById("tower").checked?30:0;
-var t=base+ex; var m=Math.round(t*0.10); var f=t+m;
+function calc(){var base=getBase();var ex=document.getElementById("tower").checked?30:0;var t=base+ex;var m=Math.round(t*0.10);var f=t+m;
 document.getElementById("r").innerText="Base: "+t+" + Markup: "+m+" = FINAL: "+f+" SAR";
-var rates={USD:0.2667,PKR:73.77,CAD:0.3801,GBP:0.2014,EUR:0.2409};
-var h="";for(var c in rates){h+="<div>"+c+"<br><b>"+(f*rates[c]).toLocaleString(undefined,{maximumFractionDigits:2})+" "+c+"</b></div>";}
+var rates={USD:0.2667,PKR:73.77,CAD:0.3801,GBP:0.2014,EUR:0.2409};var h="";for(var c in rates){h+="<div>"+c+"<br><b>"+(f*rates[c]).toLocaleString(undefined,{maximumFractionDigits:2})+" "+c+"</b></div>";}
 document.getElementById("curr").innerHTML=h;
-var det="Agent: "+document.getElementById("agent").value+" | Pax: "+document.getElementById("pax").value+" | Hotel: "+document.getElementById("hotel").value+" | Vehicle: "+document.getElementById("veh").value;
+var det="Agent: "+document.getElementById("agent").value+" | Pax: "+document.getElementById("pax").value+" | Hotel: "+document.getElementById("hotel").value+" | Route: "+document.getElementById("route").value+" | Vehicle: "+document.getElementById("veh").value;
 document.getElementById("detail").innerText=det;
 lastMsg="NWG Transport - Single Booking%0A"+det.replace(/\|/g,"-")+"%0ARoute Base: "+base+" + Extra: "+ex+" + Markup: "+m+"%0A*FINAL: "+f+" SAR*%0AUSD: "+(f*0.2667).toFixed(2)+" | PKR: "+Math.round(f*73.77);
 }
 function shareWA(){if(!lastMsg){calc();} window.open("https://wa.me/?text="+lastMsg,"_blank");}
+showPrice();
 </script></body></html>
